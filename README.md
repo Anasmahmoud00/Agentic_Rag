@@ -1,256 +1,245 @@
-🤖 Agentic RAG Travel Assistant
+# 🤖 Agentic RAG Travel Assistant
 
-This project implements a sophisticated multi-agent system designed to act as an intelligent travel assistant. It uses a combination of Retrieval-Augmented Generation (RAG), local and cloud-based Large Language Models (LLMs), and specialized agents to provide detailed and context-aware answers to a wide range of travel-related queries.
+[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com)
+[![CrewAI](https://img.shields.io/badge/CrewAI-Latest-orange.svg)](https://crewai.com)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-The system can dynamically classify a user's intent (e.g., asking about accommodations, restaurants, or local scams) and delegate the task to the appropriate specialized agent. Each agent then retrieves relevant information from a Weaviate vector database and uses an LLM to generate a structured, helpful response.
+A sophisticated multi-agent AI system that serves as an intelligent travel assistant, combining Retrieval-Augmented Generation (RAG) with specialized agents to provide contextually accurate and comprehensive travel information.
 
-✨ Key Features
+## 🌟 Overview
 
-Multi-Agent System: Built with CrewAI, orchestrating multiple specialized agents for different tasks.
+The Agentic RAG Travel Assistant leverages cutting-edge AI technologies to revolutionize travel planning and information retrieval. By dynamically classifying user intent and delegating tasks to specialized agents, the system delivers personalized, accurate, and up-to-date travel recommendations.
 
-Dynamic Intent Classification: Automatically determines the user's goal (e.g., finding activities, restaurants, visa info) to activate the correct agent.
+### Key Capabilities
 
-Retrieval-Augmented Generation (RAG): Agents retrieve up-to-date, relevant information from a Weaviate vector database, preventing hallucinations and providing factual data.
+- **Multi-Agent Architecture**: Orchestrated specialist agents for accommodations, dining, activities, and safety
+- **Intent Classification**: Automatic query categorization for optimal agent selection
+- **RAG-Powered Responses**: Context-aware answers backed by real-time data retrieval
+- **Hybrid LLM Processing**: Local inference with cloud-based classification for optimal performance
+- **RESTful API**: Clean, scalable backend architecture for easy integration
 
-Hybrid LLM Approach: Utilizes Ollama for local agent processing (e.g., llama3.1) and the Google Gemini API for high-speed tasks like filtering and classification.
+## 🚀 Quick Start
 
-API-First Design: A robust FastAPI backend serves the agentic logic, making it easy to integrate with any frontend.
+### Prerequisites
 
-Live Web Interface: Comes with a simple, interactive UI served via Ngrok for easy demonstration and testing.
+- Python 3.10 or higher
+- Docker & Docker Compose
+- [Ollama](https://ollama.ai) installed locally
+- Google AI Studio API key
+- Ngrok authentication token
 
-Structured Outputs: Uses Pydantic models to ensure agents return clean, predictable JSON data.
+### Installation
 
-🏗️ System Architecture
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Anasmahmoud00/Agentic_Rag.git
+   cd Agentic_Rag
+   ```
 
-The project follows a modular, RAG-based architecture where user queries are processed through a pipeline of classification, retrieval, and generation.
+2. **Set up Python environment**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
 
-Generated mermaid
+3. **Configure environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Edit `.env` with your credentials:
+   ```env
+   GEMINI_API_KEY=your_google_ai_studio_key
+   NGROK_AUTH_TOKEN=your_ngrok_token
+   WEAVIATE_URL=http://localhost:8080
+   ```
+
+4. **Start required services**
+   ```bash
+   # Start Weaviate database
+   docker-compose up -d
+   
+   # Pull and start Ollama model
+   ollama pull llama3.1:8b-instruct-q8_0
+   ```
+
+5. **Launch the application**
+   ```bash
+   python api/main.py
+   ```
+
+   Access your assistant at the provided ngrok URL!
+
+## 🏗️ Architecture
+
+```mermaid
 graph TD
-    A[User via Browser UI] -->|HTTP Request| B(FastAPI Backend);
-    B --> C{AgenticRagCrew};
-    C -->|1. Classify Intent| D[Intent Classifier Service];
-    D -->|e.g., "restaurant"| C;
-    C -->|2. Select Agent| E[Restaurant Agent];
-    E -->|3. Use Tool| F(Weaviate Search Tool);
-    F -->|4. Vector Search Query| G[(Weaviate Vector DB)];
-    G -->|5. Return Relevant Docs| F;
-    F -->|6. Return JSON Data| E;
-    E -->|7. Generate Final Answer with LLM| H(Ollama / Llama 3.1);
-    H -->|8. Structured JSON Output| C;
-    C -->|9. Final API Response| B;
-    B -->|HTTP Response| A;
+    A[User Interface] -->|Query| B[FastAPI Backend]
+    B --> C[Intent Classifier]
+    C --> D[Agent Selector]
+    D --> E[Specialized Agent]
+    E --> F[Weaviate RAG Tool]
+    F --> G[(Vector Database)]
+    G --> F
+    F --> E
+    E --> H[LLM Processing]
+    H --> I[Structured Response]
+    I --> B
+    B --> A
+```
 
-🛠️ Tech Stack
+### Core Components
 
-AI Framework: CrewAI & LangChain
+- **CrewAI Framework**: Orchestrates multi-agent workflows
+- **Weaviate Vector DB**: Stores and retrieves travel knowledge
+- **Ollama + Llama 3.1**: Local LLM for response generation
+- **Google Gemini**: Cloud-based intent classification
+- **FastAPI**: High-performance API layer
+- **Sentence Transformers**: Vector embedding generation
 
-Backend: FastAPI
+## 📁 Project Structure
 
-Local LLM Server: Ollama
-
-Cloud LLM API: Google Gemini
-
-Vector Database: Weaviate
-
-Vector Embeddings: Sentence-Transformers
-
-Web Server: Uvicorn
-
-Tunneling: Ngrok
-
-Data Validation: Pydantic
-
-📂 Project Structure
-Generated code
-/Agentic_Rag/
+```
+Agentic_Rag/
 ├── api/
-│   └── main.py              # FastAPI application entry point
+│   └── main.py                 # FastAPI application
 ├── core/
 │   ├── agents/
-│   │   └── rag_crew.py      # Core CrewAI logic, agent/task definitions
+│   │   └── rag_crew.py        # Agent definitions & workflows
 │   ├── models/
-│   │   └── schemas.py       # Pydantic schemas for structured output
+│   │   └── schemas.py         # Pydantic response models
 │   └── services/
-│       └── classification.py# Intent classification logic
+│       └── classification.py  # Intent classification logic
 ├── tools/
-│   ├── weaviate_search_tool.py # Custom CrewAI tool for Weaviate
+│   ├── weaviate_search_tool.py # Custom RAG tool
 │   └── weaviate_tools/
-│       └── vectorizer.py    # Sentence-Transformer model loader
+│       └── vectorizer.py      # Embedding utilities
 ├── ui/
-│   └── index.html           # Simple frontend for interaction
+│   └── index.html             # Web interface
 ├── config/
-│   └── weaviate_setup/      # Weaviate connection and schema setup
+│   └── weaviate_setup/        # Database configuration
 ├── tests/
-│   └── test.py              # Unit and integration tests
-├── .env.example             # Example environment variables file
-├── requirements.txt         # Python package dependencies
-└── README.md                # You are here
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-IGNORE_WHEN_COPYING_END
-🚀 Getting Started
+│   └── test.py                # Test suite
+├── requirements.txt           # Dependencies
+└── README.md                  # This file
+```
 
-Follow these steps to set up and run the project locally.
+## 🛠️ Technology Stack
 
-1. Prerequisites
+| Component | Technology | Purpose |
+|-----------|------------|---------|
+| **AI Framework** | CrewAI, LangChain | Multi-agent orchestration |
+| **Backend** | FastAPI, Uvicorn | RESTful API server |
+| **Local LLM** | Ollama, Llama 3.1 | Response generation |
+| **Cloud LLM** | Google Gemini | Intent classification |
+| **Vector DB** | Weaviate | Knowledge storage & retrieval |
+| **Embeddings** | Sentence Transformers | Vector generation |
+| **Validation** | Pydantic | Data structure validation |
+| **Tunneling** | Ngrok | Public URL exposure |
 
-Python 3.10+
+## 🔧 Usage
 
-Docker and Docker Compose (for running Weaviate)
+### Web Interface
 
-An account with Ngrok to get an authentication token.
+Navigate to your ngrok URL to access the interactive chat interface where you can ask travel-related questions.
 
-A Google AI Studio account to get a Gemini API key.
+### API Endpoints
 
-2. Installation
+#### Get Travel Assistance
+```http
+GET /api/run_crew?query=your_travel_question
+```
 
-Clone the repository:
+**Example:**
+```bash
+curl -X GET "https://your-ngrok-url.ngrok-free.app/api/run_crew?query=best+restaurants+in+tokyo"
+```
 
-Generated bash
-git clone https://github.com/Anasmahmoud00/Agentic_Rag.git
-cd Agentic_Rag
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
+**Response:**
+```json
+{
+  "intent": "restaurant",
+  "response": {
+    "recommendations": [
+      {
+        "name": "Sukiyabashi Jiro",
+        "type": "Sushi",
+        "location": "Ginza",
+        "price_range": "$$$$"
+      }
+    ]
+  }
+}
+```
 
-Create a virtual environment and activate it:
+## 📊 Agent Specializations
 
-Generated bash
-python -m venv venv
-source venv/bin/activate
-# On Windows: venv\Scripts\activate
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
+| Agent Type | Expertise | Example Queries |
+|------------|-----------|----------------|
+| **Accommodation** | Hotels, hostels, booking | "Where to stay in Paris?" |
+| **Dining** | Restaurants, local cuisine | "Best street food in Bangkok?" |
+| **Activities** | Attractions, tours, events | "Things to do in Rome?" |
+| **Safety** | Scams, safety tips | "Common scams in tourist areas?" |
 
-Install the required Python packages:
+## 🧪 Testing
 
-Generated bash
-pip install -r requirements.txt
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
-3. Local Services Setup
+Run the test suite to verify functionality:
 
-Start Ollama Server:
-You need a running Ollama instance. Download it from ollama.ai and run the server. Then, pull the required model:
+```bash
+python -m pytest tests/ -v
+```
 
-Generated bash
-ollama pull llama3.1:8b-instruct-q8_0
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
+## 🔄 Development Workflow
 
-Start Weaviate Database:
-The project includes a docker-compose.yml for Weaviate. Run it from the root directory:
+1. **Fork the repository**
+2. **Create a feature branch**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+3. **Make your changes**
+4. **Run tests**
+5. **Submit a pull request**
 
-Generated bash
-docker-compose up -d
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
+## 📈 Performance Optimization
 
-Note: You will also need to run the scripts in /tools/weaviate_tools/insert_data/ to populate the database with your travel data.
+- **Hybrid LLM Strategy**: Local processing for complex reasoning, cloud for quick classification
+- **Vector Caching**: Optimized retrieval with Weaviate's indexing
+- **Async Processing**: Non-blocking API operations with FastAPI
+- **Structured Outputs**: Pydantic models ensure consistent response formats
 
-4. Configuration
+## 🚧 Roadmap
 
-Create a .env file in the root directory by copying the example:
+- [ ] **Advanced Agents**: Flight booking, cultural etiquette, weather integration
+- [ ] **Enhanced RAG**: Improved filtering and ranking algorithms  
+- [ ] **Modern Frontend**: React/Vue.js interface with real-time updates
+- [ ] **Caching Layer**: Redis integration for frequently asked questions
+- [ ] **Multi-language Support**: Localized responses and translations
+- [ ] **Mobile App**: Native iOS/Android applications
+- [ ] **Analytics Dashboard**: Usage metrics and performance monitoring
 
-Generated bash
-cp .env.example .env
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
+## 🤝 Contributing
 
-Edit the .env file and add your secret keys:
+Contributions are welcome! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on how to submit improvements, report issues, or request features.
 
-Generated env
-# Get from Google AI Studio
-GEMINI_API_KEY="AIzaSy..."
+## 📄 License
 
-# Get from your ngrok dashboard
-NGROK_AUTH_TOKEN="2yrm7j..."
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-# Weaviate connection details (matches docker-compose.yml)
-WEAVIATE_URL="http://localhost:8080"
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Env
-IGNORE_WHEN_COPYING_END
-5. Running the Application
+## 🙏 Acknowledgments
 
-Once all services are running and your .env file is configured, start the main application:
+- [CrewAI](https://crewai.com) for the multi-agent framework
+- [Weaviate](https://weaviate.io) for vector database capabilities
+- [Ollama](https://ollama.ai) for local LLM inference
+- [FastAPI](https://fastapi.tiangolo.com) for the robust API framework
 
-Generated bash
-python api/main.py
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
+## 📞 Support
 
-The terminal will display the public ngrok URL.
+- **Issues**: [GitHub Issues](https://github.com/Anasmahmoud00/Agentic_Rag/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/Anasmahmoud00/Agentic_Rag/discussions)
+- **Documentation**: [Project Wiki](https://github.com/Anasmahmoud00/Agentic_Rag/wiki)
 
-Generated code
-🚀 FastAPI server is running.
-🔗 PUBLIC URL: https://<some-random-string>.ngrok-free.app
-✅ UI file updated. Open the UI at: https://<some-random-string>.ngrok-free.app
-...
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-IGNORE_WHEN_COPYING_END
+---
 
-Open the provided URL in your browser to interact with the travel assistant.
-
-🤖 API Usage
-
-You can also interact with the API directly using curl or any API client.
-
-Endpoint: GET /api/run_crew
-
-Example Request:
-
-Generated bash
-curl -X GET "https://<your-ngrok-url>.ngrok-free.app/api/run_crew?query=what+are+some+good+activities+in+tokyo"
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
-📈 Future Improvements
-
-Implement more specialized agents (e.g., for flight booking, cultural etiquette).
-
-Enhance the RAG filtering and ranking logic for more precise results.
-
-Develop a more feature-rich frontend using a framework like React or Vue.
-
-Add comprehensive unit and integration tests for all components.
-
-Implement caching for frequently asked questions to improve performance.
+**Built with ❤️ by [Anas Mahmoud](https://github.com/Anasmahmoud00)**
