@@ -210,22 +210,7 @@ python -m pytest tests/ -v
 - **Structured Outputs**: Pydantic models ensure consistent response formats
 
 
-## 🤝 Contributing
-
-Contributions are welcome! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on how to submit improvements, report issues, or request features.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
 - [CrewAI](https://crewai.com) for the multi-agent framework
 - [Weaviate](https://weaviate.io) for vector database capabilities
 - [Ollama](https://ollama.ai) for local LLM inference
 - [FastAPI](https://fastapi.tiangolo.com) for the robust API framework
-
-
----
-
-**Built with ❤️ by [Anas Mahmoud](https://github.com/Anasmahmoud00)**
