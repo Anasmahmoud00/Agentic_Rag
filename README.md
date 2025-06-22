@@ -209,15 +209,6 @@ python -m pytest tests/ -v
 - **Async Processing**: Non-blocking API operations with FastAPI
 - **Structured Outputs**: Pydantic models ensure consistent response formats
 
-## 🚧 Roadmap
-
-- [ ] **Advanced Agents**: Flight booking, cultural etiquette, weather integration
-- [ ] **Enhanced RAG**: Improved filtering and ranking algorithms  
-- [ ] **Modern Frontend**: React/Vue.js interface with real-time updates
-- [ ] **Caching Layer**: Redis integration for frequently asked questions
-- [ ] **Multi-language Support**: Localized responses and translations
-- [ ] **Mobile App**: Native iOS/Android applications
-- [ ] **Analytics Dashboard**: Usage metrics and performance monitoring
 
 ## 🤝 Contributing
 
@@ -234,11 +225,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Ollama](https://ollama.ai) for local LLM inference
 - [FastAPI](https://fastapi.tiangolo.com) for the robust API framework
 
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/Anasmahmoud00/Agentic_Rag/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/Anasmahmoud00/Agentic_Rag/discussions)
-- **Documentation**: [Project Wiki](https://github.com/Anasmahmoud00/Agentic_Rag/wiki)
 
 ---
 
